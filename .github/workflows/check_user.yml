@@ -8,11 +8,6 @@ jobs:
       - name: Clone OpenVINO
         uses: actions/checkout@v2
 
-      - name: Check email
-        uses: higebu/actions-email-domain@v1
-        with:
-          domains: 'intel.com'
-
       - name: Get email
         env:
           GITHUB_EMAIL: ${{ github.event.head_commit.author.email }}
@@ -21,17 +16,23 @@ jobs:
       - name: Get user info
         id: user_info
         run: |
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
+          #curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}
+          #curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
           content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
-          echo "::set-output name=packageJson::$content"
+          echo "::set-output name=user_info_json::$content"
 
       - name: Check email 2
         run: |
-          echo "${{fromJson(steps.user_info.outputs.packageJson).email}}"
+          echo ${{ steps.user_info.outputs.user_info_json }}
+          echo "${{ fromJson(steps.user_info.outputs.user_info_json).email }}"
 
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      - name: Check email
+        uses: higebu/actions-email-domain@v1
+        with:
+          domains: 'Qintel.com'
 
