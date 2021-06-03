@@ -27,7 +27,7 @@ jobs:
           echo "${{ toJSON(steps.user_info.outputs.user_info_json).email }}"
 
       - name: Out email 2
-        if ${{ github.event.head_commit.author.email != toJSON(steps.user_info.outputs.user_info_json).email }}
+        if: ${{ github.event.head_commit.author.email != toJSON(steps.user_info.outputs.user_info_json).email }}
         run: |
           echo "Commit email ${{ github.event.head_commit.author.email }} is different from GitHub account $ {{ toJSON(steps.user_info.outputs.user_info_json).email }}"
 
