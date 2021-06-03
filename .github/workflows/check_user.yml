@@ -21,7 +21,7 @@ jobs:
       - name: Get user info
         run: |
           curl --request POST \
-          --url ${{ github.event.sender.url }}
+          --url ${{ github.event.sender.url }} \
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{}' \
