@@ -19,11 +19,14 @@ jobs:
         run: echo "$GITHUB_EMAIL"
 
       - name: Get user info
+        id: user_info
         run: |
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
-          out=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
-          echo ${{ toJSON($out).email }}
+          content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
+          echo "::set-output name=packageJson::$content"
+        run: |
+          echo "${{fromJson(steps.user_info.outputs.packageJson).email}}"
 
       - name: Dump GitHub context
         env:
