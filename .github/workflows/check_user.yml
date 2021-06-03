@@ -8,10 +8,10 @@ jobs:
       - name: Clone OpenVINO
         uses: actions/checkout@v2
 
-      - name: Get email
+      - name: Get commit email
         env:
-          GITHUB_EMAIL: ${{ github.event.head_commit.author.email }}
-        run: echo "$GITHUB_EMAIL"
+          COMMIT_EMAIL: ${{ github.event.head_commit.author.email }}
+        run: echo "$COMMIT_EMAIL"
 
       - name: Get user info
         id: user_info
@@ -26,12 +26,13 @@ jobs:
         run: |
           echo ${{ steps.user_info.outputs.user_info_json }}
           echo "${{ toJSON(steps.user_info.outputs.user_info_json).email }}"
-          echo $GITHUB_EMAIL
+          echo "$GITHUB_EMAIL"
+          echo "$COMMIT_EMAIL"
 
       - name: Check email
-        if: ${{ github.event.head_commit.author.email != $GITHUB_EMAIL }}
+        if: ${{ env.COMMIT_EMAIL != env.GITHUB_EMAIL }}
         run: |
-          echo "Commit email ${{ github.event.head_commit.author.email }} is different from GitHub account $GITHUB_EMAIL"
+          echo "Commit email $COMMIT_EMAIL is different from GitHub account $GITHUB_EMAIL"
           exit 1
 
       - name: Dump GitHub context
