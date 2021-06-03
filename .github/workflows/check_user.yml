@@ -15,8 +15,16 @@ jobs:
 
       - name: Get login
         env:
-          GITHUB_USERNAME: ${{ github.event.commits.author.email }}
-        run: echo "$GITHUB_USERNAME"
+          GITHUB_EMAIL: ${{ github.event.head_commit.author.email }}
+        run: echo "$GITHUB_EMAIL"
+
+      - name: Get user info
+        run: |
+          curl --request POST \
+          --url ${{ github.sender.url }}
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --fail
 
       - name: Dump GitHub context
         env:
