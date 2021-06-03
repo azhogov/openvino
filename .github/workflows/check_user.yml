@@ -21,7 +21,9 @@ jobs:
       - name: Get user info
         run: |
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}
-
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
+          out=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
+          echo ${{ toJSON(out).email }}
 
       - name: Dump GitHub context
         env:
