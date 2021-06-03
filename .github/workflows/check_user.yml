@@ -20,14 +20,14 @@ jobs:
           #curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
           content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
           echo "::set-output name=user_info_json::$content"
-          echo "echo $content | jq '.email'" >> $GITHUB_EMAIL
+          echo "GITHUB_EMAIL=`echo $content | jq '.email'`" >> $GITHUB_ENV
 
       - name: Out account email
         run: |
           echo ${{ steps.user_info.outputs.user_info_json }}
           echo "${{ toJSON(steps.user_info.outputs.user_info_json).email }}"
-          echo "$GITHUB_EMAIL"
-          echo "$COMMIT_EMAIL"
+          echo "$GITHUB_EMAIL" ${{ env.GITHUB_EMAIL }}
+          echo "$COMMIT_EMAIL" ${{ env.COMMIT_EMAIL }}
 
       - name: Check email
         if: ${{ env.COMMIT_EMAIL != env.GITHUB_EMAIL }}
