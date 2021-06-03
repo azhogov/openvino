@@ -25,6 +25,8 @@ jobs:
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.organizations_url }}
           content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
           echo "::set-output name=packageJson::$content"
+
+      - name: Check email 2
         run: |
           echo "${{fromJson(steps.user_info.outputs.packageJson).email}}"
 
