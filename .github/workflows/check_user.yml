@@ -20,12 +20,8 @@ jobs:
 
       - name: Get user info
         run: |
-          curl --request POST \
-          --url ${{ github.event.sender.url }} \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{}' \
-          --fail
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}
+
 
       - name: Dump GitHub context
         env:
