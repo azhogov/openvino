@@ -1,0 +1,36 @@
+name: Commit Checks
+on: [push, pull_request]
+
+jobs:
+  Check_User:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get commit email
+        run: |
+          echo "COMMIT_EMAIL=\"${{ github.event.head_commit.author.email }}\"" >> $GITHUB_ENV
+
+      - name: Get user info
+        id: user_info
+        run: |
+          content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
+          echo $content
+          echo "GITHUB_EMAIL=`echo $content | jq '.email'`" >> $GITHUB_ENV
+
+      - name: Print emails
+        run: |
+          echo "Git commit email: $COMMIT_EMAIL ${{ env.COMMIT_EMAIL }}"
+          echo "GitHub account email: $COMMIT_EMAIL ${{ env.COMMIT_EMAIL }}"
+
+      - name: Different emails
+        if: ${{ env.COMMIT_EMAIL != env.GITHUB_EMAIL }}
+        run: |
+          echo "Git commit email $COMMIT_EMAIL is different from GitHub account email $GITHUB_EMAIL"
+          echo "GitHub account email should be public and equal to git email"
+          exit 1
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+
