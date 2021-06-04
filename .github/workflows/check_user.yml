@@ -14,7 +14,7 @@ jobs:
         run: |
           echo "COMMIT_EMAIL=\"${{ github.event.head_commit.author.email }}\"" >> $GITHUB_ENV
 
-      - name: Get user info
+      - name: Get GitHub email
         id: user_info
         run: |
           content=`curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.sender.url }}`
@@ -24,7 +24,7 @@ jobs:
       - name: Print emails
         run: |
           echo "Git commit email: $COMMIT_EMAIL ${{ env.COMMIT_EMAIL }}"
-          echo "GitHub account email: $COMMIT_EMAIL ${{ env.COMMIT_EMAIL }}"
+          echo "GitHub account email: $GITHUB_EMAIL ${{ env.GITHUB_EMAIL }}"
 
       - name: Different emails
         if: ${{ env.COMMIT_EMAIL != env.GITHUB_EMAIL }}
