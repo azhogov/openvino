@@ -32,3 +32,4 @@ jobs:
           echo "Git commit email $COMMIT_EMAIL is different from GitHub account email $GITHUB_EMAIL"
           echo "GitHub account email should be public and equal to git email"
           exit 1
+
